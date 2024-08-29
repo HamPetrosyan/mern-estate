@@ -11,7 +11,7 @@ export const Header = () => {
             <span className="text-customDarkGreen">Estate</span>
           </h1>
         </Link>
-        <form className="bg-green-50 rounded-lg border-2 border-transparent focus-within:border-customDarkGreen transition duration-75 flex items-center p-3">
+        <form className="rounded-lg border border-customDarkGreen focus-within:outline focus-within:outline-customDarkGreen transition-all duration-75 flex items-center p-3">
           <input
             type="text"
             placeholder="Search..."
@@ -19,6 +19,7 @@ export const Header = () => {
           />
           <FaSearch className="text-customNormGreen" />
         </form>
+
         <ul className="flex gap-4">
           <Link to="/">
             <li className="hidden sm:inline text-customDarkGreen hover:underline">
