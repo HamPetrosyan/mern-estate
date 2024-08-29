@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const defaultProfileIconPath = "../utils/assets/profile_icon.png";
 
 const userSchema = new mongoose.Schema(
   {
@@ -15,6 +16,10 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    avatar: {
+      type: String,
+      default: defaultProfileIconPath,
     },
   },
   { timestamps: true }
