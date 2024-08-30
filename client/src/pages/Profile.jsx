@@ -1,7 +1,55 @@
 import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+
+import { app } from "../firebase";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
+  const [file, setFile] = useState(undefined);
+  const [filePerce, setFilePerce] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [formData, setFormData] = useState({});
+  const fileRef = useRef(null);
+
+  useEffect(() => {
+    if (file) {
+      handleFileUpload(file);
+    }
+  }, [file]);
+
+  const handleFileUpload = (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Handle progress updates
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFilePerce(Math.round(progress));
+      },
+      (error) => {
+        // Handle errors
+        setFileUploadError(true);
+      },
+      () => {
+        // Handle successful completion
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) =>
+          setFormData({ ...formData, avatar: downloadUrl })
+        );
+      }
+    );
+  };
+
   return (
     <div className="max-w-md mx-auto px-3">
       <h1 className="text-center text-3xl text-green-950 font-semibold my-7">
@@ -9,11 +57,36 @@ export default function Profile() {
       </h1>
 
       <form autoComplete="off" className="flex flex-col gap-3">
+        <input
+          onChange={(e) => setFile(e.target.files[0])}
+          type="file"
+          ref={fileRef}
+          hidden
+          accept="image/*"
+        />
         <img
-          src={currentUser.avatar}
+          onClick={() => fileRef.current.click()}
+          src={formData.avatar || currentUser.avatar}
           alt="profile"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-10"
         />
+
+        <p className="text-sm self-center">
+          {fileUploadError ? (
+            <span className="text-red-700">Error Image Upload</span>
+          ) : filePerce === 100 ? (
+            <span className="text-customNormGreen">
+              Image successfully uploaded!
+            </span>
+          ) : filePerce > 0 && filePerce < 100 ? (
+            <span className="text-customNormGreen">
+              {`Uploading ${filePerce}%`}
+            </span>
+          ) : (
+            ""
+          )}
+        </p>
+
         <input
           type="text"
           id="username"
