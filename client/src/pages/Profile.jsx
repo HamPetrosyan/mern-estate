@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import {
   getDownloadURL,
@@ -8,14 +8,23 @@ import {
 } from "firebase/storage";
 
 import { app } from "../firebase";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../redux/user/userSlice";
 
 export default function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
   const [filePerce, setFilePerce] = useState(0);
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState({ text: "", type: "" });
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const fileRef = useRef(null);
+  const dispatch = useDispatch();
+
+  console.log(loading);
 
   useEffect(() => {
     if (file) {
@@ -56,13 +65,49 @@ export default function Profile() {
     );
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
+      console.error("Error:", error);
+      dispatch(updateUserFailure(error.message));
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto px-3">
       <h1 className="text-center text-3xl text-green-950 font-semibold my-7 mb-16">
         Profile
       </h1>
 
-      <form autoComplete="off" className="flex flex-col gap-3">
+      <form
+        onSubmit={handleSubmit}
+        autoComplete="off"
+        className="flex flex-col gap-3"
+      >
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type="file"
@@ -101,22 +146,30 @@ export default function Profile() {
           type="text"
           id="username"
           placeholder="Username"
+          defaultValue={currentUser.username}
+          onChange={handleChange}
           className="border border-customDarkGreen focus:outline-customDarkGreen placeholder:text-customDarkGreen placeholder:opacity-40 p-3 rounded-full"
         />
         <input
           type="email"
           id="email"
           placeholder="Email"
+          defaultValue={currentUser.email}
+          onChange={handleChange}
           className="border border-customDarkGreen focus:outline-customDarkGreen placeholder:text-customDarkGreen placeholder:opacity-40 p-3 rounded-full"
         />
         <input
           type="password"
           id="password"
           placeholder="Password"
+          onChange={handleChange}
           className="border border-customDarkGreen focus:outline-customDarkGreen placeholder:text-customDarkGreen placeholder:opacity-40 p-3 rounded-full"
         />
-        <button className="bg-green-900 text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase">
-          Update
+        <button
+          disabled={loading}
+          className="bg-green-900 text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase"
+        >
+          {loading ? "Loading..." : "Update"}
         </button>
       </form>
       <div className="flex justify-between pt-2">
@@ -127,6 +180,10 @@ export default function Profile() {
           Sign Out
         </span>
       </div>
+      <p className="mt-4 text-red-700">{error ? error : ""}</p>
+      <p className="mt-4 text-customNormGreen">
+        {updateSuccess ? "User is updated successfully!" : ""}
+      </p>
     </div>
   );
 }
