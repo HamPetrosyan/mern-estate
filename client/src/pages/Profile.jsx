@@ -13,8 +13,8 @@ export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
   const [filePerce, setFilePerce] = useState(0);
-  const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [message, setMessage] = useState({ text: "", type: "" });
   const fileRef = useRef(null);
 
   useEffect(() => {
@@ -36,23 +36,29 @@ export default function Profile() {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerce(Math.round(progress));
+        setMessage({ text: "", type: "" });
       },
       (error) => {
         // Handle errors
-        setFileUploadError(true);
+        setFilePerce(0);
+        setMessage({ text: "Error Image Upload", type: "error" });
+        setTimeout(() => setMessage({ text: "", type: "" }), 3000);
       },
       () => {
         // Handle successful completion
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) =>
-          setFormData({ ...formData, avatar: downloadUrl })
-        );
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          setFormData({ ...formData, avatar: downloadUrl });
+          setFilePerce(0);
+          setMessage({ text: "Image successfully uploaded!", type: "success" });
+          setTimeout(() => setMessage({ text: "", type: "" }), 3000);
+        });
       }
     );
   };
 
   return (
     <div className="max-w-md mx-auto px-3">
-      <h1 className="text-center text-3xl text-green-950 font-semibold my-7">
+      <h1 className="text-center text-3xl text-green-950 font-semibold my-7 mb-16">
         Profile
       </h1>
 
@@ -68,22 +74,26 @@ export default function Profile() {
           onClick={() => fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
           alt="profile"
-          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-10"
+          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-5"
         />
 
         <p className="text-sm self-center">
-          {fileUploadError ? (
-            <span className="text-red-700">Error Image Upload</span>
-          ) : filePerce === 100 ? (
-            <span className="text-customNormGreen">
-              Image successfully uploaded!
-            </span>
-          ) : filePerce > 0 && filePerce < 100 ? (
+          {filePerce > 0 && filePerce < 100 ? (
             <span className="text-customNormGreen">
               {`Uploading ${filePerce}%`}
             </span>
           ) : (
-            ""
+            message.text && (
+              <span
+                className={
+                  message.type === "error"
+                    ? "text-red-700"
+                    : "text-customNormGreen"
+                }
+              >
+                {message.text}
+              </span>
+            )
           )}
         </p>
 

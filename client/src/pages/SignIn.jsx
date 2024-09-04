@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+  clearError,
   signInFailure,
   signInStart,
   signInSuccess,
@@ -20,6 +21,10 @@ export default function SignIn() {
       ...formData,
       [e.target.id]: e.target.value,
     });
+
+    if (error) {
+      dispatch(clearError());
+    }
   };
 
   const handleSubmit = async (e) => {

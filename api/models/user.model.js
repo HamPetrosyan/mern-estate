@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-const defaultProfileIconPath = "../utils/assets/profile_icon.png";
 
 const userSchema = new mongoose.Schema(
   {
@@ -19,7 +18,8 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: defaultProfileIconPath,
+      default:
+        "https://www.pngkey.com/png/detail/115-1150152_default-profile-picture-avatar-png-green.png",
     },
   },
   { timestamps: true }
