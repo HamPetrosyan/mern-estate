@@ -40,7 +40,7 @@ export const OAuth = () => {
     <button
       type="button"
       onClick={handleGoogleClick}
-      className="bg-green-950 text-white px-8 py-3 rounded-full hover:opacity-90"
+      className="bg-customNormGreen text-white px-8 py-3 rounded-full hover:opacity-90"
     >
       Continue with Google
     </button>

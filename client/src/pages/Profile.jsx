@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -215,10 +215,16 @@ export default function Profile() {
         />
         <button
           disabled={loading}
-          className="bg-green-900 text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase"
+          className="bg-customDarkGreen text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase"
         >
           {loading ? "Loading..." : "Update"}
         </button>
+        <Link
+          to={"/create-listing"}
+          className="bg-customNormGreen text-center text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase"
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between pt-2">
         <span

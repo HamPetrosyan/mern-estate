@@ -87,7 +87,7 @@ export default function SignIn() {
           />
           <button
             disabled={loading}
-            className={`bg-green-900 text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase ${
+            className={`bg-customDarkGreen text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase ${
               loading ? "cursor-not-allowed" : "cursor-pointer"
             }`}
           >

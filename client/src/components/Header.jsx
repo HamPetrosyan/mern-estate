@@ -8,7 +8,7 @@ export const Header = () => {
   return (
     <header className="">
       <div className="flex justify-between items-center max-w-screen-2xl mx-auto p-3">
-        <Link to="/">
+        <Link to={"/"}>
           <h1 className="font-bold text-sm sm:text-2xl flex flex-wrap">
             <span className="text-customNormGreen">Ham</span>
             <span className="text-customDarkGreen">Estate</span>
@@ -24,18 +24,18 @@ export const Header = () => {
         </form>
 
         <ul className="flex gap-4">
-          <Link to="/">
+          <Link to={"/"}>
             <li className="hidden sm:inline text-customDarkGreen hover:underline">
               Home
             </li>
           </Link>
-          <Link to="/about">
+          <Link to={"/about"}>
             <li className="hidden sm:inline text-customDarkGreen hover:underline">
               About
             </li>
           </Link>
 
-          <Link to="/profile">
+          <Link to={"/profile"}>
             {currentUser ? (
               <img
                 src={currentUser.avatar}
