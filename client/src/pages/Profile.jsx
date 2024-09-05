@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -12,9 +13,12 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
-  deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  deleteUserFailure,
+  signOutStart,
+  signOutSuccess,
+  signOutFailure,
 } from "../redux/user/userSlice";
 
 export default function Profile() {
@@ -26,8 +30,9 @@ export default function Profile() {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  console.log(loading);
+  console.log(currentUser);
 
   useEffect(() => {
     if (file) {
@@ -111,13 +116,32 @@ export default function Profile() {
       const data = await res.json();
 
       if (data.success === false) {
-        dispatch(updateUserFailure(data.message));
+        dispatch(deleteUserFailure(data.message));
         return;
       }
 
       dispatch(deleteUserSuccess());
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+
+      const res = await fetch("/api/auth/signout");
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+
+      dispatch(signOutSuccess());
+    } catch (error) {
+      dispatch(signOutFailure(error.message));
     }
   };
 
@@ -203,7 +227,10 @@ export default function Profile() {
         >
           Delete Account
         </span>
-        <span className="text-customDarkGreen hover:underline cursor-pointer">
+        <span
+          onClick={handleSignOut}
+          className="text-customDarkGreen hover:underline cursor-pointer"
+        >
           Sign Out
         </span>
       </div>

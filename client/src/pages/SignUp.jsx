@@ -29,6 +29,12 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.username || !formData.email || !formData.password) {
+      dispatch(signUpFailure("Please fill in all fields"));
+      return;
+    }
+
     try {
       dispatch(signUpStart());
 
