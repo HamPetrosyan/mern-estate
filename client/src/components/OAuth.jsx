@@ -16,10 +16,13 @@ export const OAuth = () => {
 
       const result = await signInWithPopup(auth, provider);
 
+      const token = await result.user.getIdToken(true);
+
       const res = await fetch("/api/auth/google", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: result.user.displayName,

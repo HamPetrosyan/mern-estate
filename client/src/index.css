@@ -19,8 +19,8 @@
     content: "";
     position: absolute;
     left: 0;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     background-color: #fff;
     border: 1px solid rgb(0, 104, 74);
     border-radius: 3px;
@@ -34,16 +34,24 @@
 .checkbox-label::after {
     content: "";
     position: absolute;
-    left: 4px;
-    top: 8px;
-    width: 10px;
+    left: 2px;
+    top: 11px;
+    width: 11px;
     height: 5px;
     border: solid white;
     border-width: 0 0 2px 2px;
-    transform: rotate(-45deg);
+    transform: rotate(-50deg);
     opacity: 0;
 }
 
 .checkbox-input:checked+.checkbox-label::after {
     opacity: 1;
+}
+
+img {
+    user-select: none;
+}
+
+::placeholder {
+    user-select: none;
 }

@@ -9,7 +9,7 @@ export const Header = () => {
     <header className="">
       <div className="flex justify-between items-center max-w-screen-2xl mx-auto p-3">
         <Link to={"/"}>
-          <h1 className="font-bold text-sm sm:text-2xl flex flex-wrap">
+          <h1 className="font-bold text-sm sm:text-2xl flex flex-wrap select-none">
             <span className="text-customNormGreen">Ham</span>
             <span className="text-customDarkGreen">Estate</span>
           </h1>
@@ -25,13 +25,15 @@ export const Header = () => {
 
         <ul className="flex gap-4">
           <Link to={"/"}>
-            <li className="hidden sm:inline text-customDarkGreen hover:underline">
-              Home
+            <li className="relative text-customDarkGreen group">
+              <span className="relative z-10">Home</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
           <Link to={"/about"}>
-            <li className="hidden sm:inline text-customDarkGreen hover:underline">
-              About
+            <li className="relative text-customDarkGreen group">
+              <span className="relative z-10">About</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
 
@@ -43,7 +45,10 @@ export const Header = () => {
                 className="rounded-full h-7 w-7"
               />
             ) : (
-              <li className="text-customDarkGreen hover:underline">Sign In</li>
+              <li className="relative text-customDarkGreen group">
+                <span className="relative z-10">Sign In</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
+              </li>
             )}
           </Link>
         </ul>
