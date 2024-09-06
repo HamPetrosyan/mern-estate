@@ -291,7 +291,7 @@ export default function Profile() {
         onClick={handleShowListings}
         className="text-customNormGreen w-full underline underline-offset-4"
       >
-        {userListings && userListings.length >= 0 ? "Show Listings" : ""}
+        Show Listings
       </button>
 
       <p className="text-red-700 mt-5">{showListingsError}</p>
