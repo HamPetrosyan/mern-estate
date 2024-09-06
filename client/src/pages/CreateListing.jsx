@@ -174,7 +174,7 @@ export default function CreateListing() {
             id="name"
             placeholder="Name"
             maxLength="62"
-            minLength="10"
+            minLength="5"
             autoComplete="off"
             required
             value={formData.name}

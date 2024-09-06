@@ -151,7 +151,6 @@ export default function Profile() {
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
 
-      console.log(data);
       if (data.success === false) {
         setShowListingsError(true);
         return;
@@ -162,6 +161,29 @@ export default function Profile() {
       setShowListingsError(true);
     }
   };
+
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  console.log(userListings);
 
   return (
     <div className="max-w-md mx-auto px-3">
@@ -258,17 +280,20 @@ export default function Profile() {
           Sign Out
         </span>
       </div>
+
       <p className="mt-4 text-red-700">{error ? error : ""}</p>
+
       <p className="mt-4 text-customNormGreen">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
 
       <button
         onClick={handleShowListings}
-        className="text-customNormGreen w-full"
+        className="text-customNormGreen w-full underline underline-offset-4"
       >
-        Show Listings
+        {userListings && userListings.length >= 0 ? "Show Listings" : ""}
       </button>
+
       <p className="text-red-700 mt-5">{showListingsError}</p>
 
       {userListings && userListings.length > 0 && (
@@ -288,7 +313,7 @@ export default function Profile() {
                 key={listing._id}
                 className="border border-customBorderGreen rounded-lg p-3 flex flex-col gap-4"
               >
-                <h2 className="text-lg font-semibold break-words">
+                <h2 className="text-lg font-semibold break-words text-green-900">
                   {listing.name}
                 </h2>
 
@@ -300,11 +325,11 @@ export default function Profile() {
                       className="h-24 w-24 object-cover rounded-lg"
                     />
 
-                    <div className="flex justify-between items-center w-full pl-3">
+                    <div className="flex justify-between items-center w-full pl-3 text-customDarkGreen">
                       <Link to={`/listing/${listing._id}`}>
-                        <li className="relative group list-none font-semibold">
+                        <li className="relative group list-none font-semibold ">
                           <span className="relative z-10">{truncatedName}</span>
-                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
                         </li>
                       </Link>
 
@@ -337,11 +362,11 @@ export default function Profile() {
                 )}
 
                 {listing.imageUrls.length > 1 && (
-                  <div className="flex items-center justify-between mt-2">
+                  <div className="flex items-center justify-between mt-2 text-customDarkGreen">
                     <Link to={`/listing/${listing._id}`}>
-                      <li className="relative group list-none font-semibold">
+                      <li className="relative group list-none font-semibold ">
                         <span className="relative z-10">{truncatedName}</span>
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
                       </li>
                     </Link>
 
