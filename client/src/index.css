@@ -55,3 +55,8 @@ img {
 ::placeholder {
     user-select: none;
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: rgb(0, 169, 124);
+}
