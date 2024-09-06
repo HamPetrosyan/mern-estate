@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -28,11 +28,10 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState({ text: "", type: "" });
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  console.log(currentUser);
 
   useEffect(() => {
     if (file) {
@@ -145,6 +144,25 @@ export default function Profile() {
     }
   };
 
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+
+      console.log(data);
+      if (data.success === false) {
+        setShowListingsError(true);
+        return;
+      }
+
+      setUserListings(data);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto px-3">
       <h1 className="text-center text-3xl text-green-950 font-semibold my-7 mb-16">
@@ -244,6 +262,109 @@ export default function Profile() {
       <p className="mt-4 text-customNormGreen">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
+
+      <button
+        onClick={handleShowListings}
+        className="text-customNormGreen w-full"
+      >
+        Show Listings
+      </button>
+      <p className="text-red-700 mt-5">{showListingsError}</p>
+
+      {userListings && userListings.length > 0 && (
+        <div className="flex flex-col gap-4 text-green-950">
+          <h1 className="text-center mt-7 text-2xl font-semibold">
+            Your Listings
+          </h1>
+
+          {userListings.map((listing) => {
+            const truncatedName =
+              listing.name.length > 10
+                ? `${listing.name.slice(0, 10)}...`
+                : listing.name;
+
+            return (
+              <div
+                key={listing._id}
+                className="border border-customBorderGreen rounded-lg p-3 flex flex-col gap-4"
+              >
+                <h2 className="text-lg font-semibold break-words">
+                  {listing.name}
+                </h2>
+
+                {listing.imageUrls.length === 1 ? (
+                  <div className="flex items-center">
+                    <img
+                      src={listing.imageUrls[0]}
+                      alt="listing cover"
+                      className="h-24 w-24 object-cover rounded-lg"
+                    />
+
+                    <div className="flex justify-between items-center w-full pl-3">
+                      <Link to={`/listing/${listing._id}`}>
+                        <li className="relative group list-none font-semibold">
+                          <span className="relative z-10">{truncatedName}</span>
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
+                        </li>
+                      </Link>
+
+                      <div className="flex flex-col items-center">
+                        <button
+                          onClick={() => handleListingDelete(listing._id)}
+                          className="text-red-700 uppercase"
+                        >
+                          Delete
+                        </button>
+                        <Link>
+                          <button className="text-customNormGreen uppercase">
+                            Edit
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex gap-2 overflow-x-auto">
+                    {listing.imageUrls.map((url, index) => (
+                      <img
+                        key={index}
+                        src={url}
+                        alt={`listing image ${index}`}
+                        className="h-24 w-24 object-cover rounded-lg"
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {listing.imageUrls.length > 1 && (
+                  <div className="flex items-center justify-between mt-2">
+                    <Link to={`/listing/${listing._id}`}>
+                      <li className="relative group list-none font-semibold">
+                        <span className="relative z-10">{truncatedName}</span>
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
+                      </li>
+                    </Link>
+
+                    <div className="flex flex-col items-center">
+                      <button
+                        onClick={() => handleListingDelete(listing._id)}
+                        className="text-red-700 uppercase"
+                      >
+                        Delete
+                      </button>
+                      <Link>
+                        <button className="text-customNormGreen uppercase">
+                          Edit
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

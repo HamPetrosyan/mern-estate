@@ -6,6 +6,7 @@ export default {
       colors: {
         customDarkGreen: "rgb(0, 104, 74)",
         customNormGreen: "rgb(0, 169, 124)",
+        customBorderGreen: "rgba(0, 104, 74, 0.4)",
       },
     },
   },
