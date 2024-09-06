@@ -10,6 +10,7 @@ import About from "./pages/About";
 import Listing from "./pages/Listing";
 import Profile from "./pages/Profile";
 import CreateListing from "./pages/CreateListing";
+import UpdateListing from "./pages/UpdateListing";
 
 export default function App() {
   return (
@@ -24,6 +25,10 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-listing" element={<CreateListing />} />
+          <Route
+            path="/update-listing/:listingId"
+            element={<UpdateListing />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
