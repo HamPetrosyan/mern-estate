@@ -7,48 +7,47 @@ export const Header = () => {
 
   return (
     <header className="">
-      <div className="flex justify-between items-center max-w-screen-2xl mx-auto p-3">
-        <Link to={"/"}>
-          <h1 className="font-bold text-sm sm:text-2xl flex flex-wrap select-none">
+      <div className="flex justify-between items-center max-w-screen-2xl mx-auto p-3 text-green-950">
+        <Link to="/">
+          <h1 className="font-bold text-base sm:text-xl flex flex-wrap">
             <span className="text-customNormGreen">Ham</span>
             <span className="text-customDarkGreen">Estate</span>
           </h1>
         </Link>
-        <form className="rounded-full border border-customDarkGreen focus-within:outline focus-within:outline-customDarkGreen flex items-center p-3">
+
+        <form className="border outline-none border-customDarkGreen p-3 flex items-center focus-within:ring-1 ring-customDarkGreen rounded-full ml-2">
           <input
             type="text"
             placeholder="Search..."
-            className="bg-transparent text-green-950 placeholder:text-customDarkGreen placeholder:opacity-40 border-none outline-none w-24 sm:w-64"
+            className="bg-transparent focus:outline-none sm:w-72 w-32 placeholder:text-customDarkGreen placeholder:opacity-40"
           />
-          <FaSearch className="text-customDarkGreen" />
+          <button>
+            <FaSearch className="text-customDarkGreen" />
+          </button>
         </form>
 
-        <ul className="flex gap-4">
-          <Link to={"/"}>
-            <li className="relative text-customDarkGreen group">
+        <ul className="flex sm:gap-4">
+          <Link to="/">
+            <li className="relative group list-none hidden sm:inline text-customDarkGreen">
               <span className="relative z-10">Home</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
-          <Link to={"/about"}>
-            <li className="relative text-customDarkGreen group">
+          <Link to="/about">
+            <li className="relative group list-none hidden sm:inline text-customDarkGreen">
               <span className="relative z-10">About</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
-
-          <Link to={"/profile"}>
+          <Link to="/profile">
             {currentUser ? (
               <img
+                className="rounded-full h-8 w-8 object-cover ml-2"
                 src={currentUser.avatar}
                 alt="profile"
-                className="rounded-full h-7 w-7"
               />
             ) : (
-              <li className="relative text-customDarkGreen group">
-                <span className="relative z-10">Sign In</span>
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
-              </li>
+              <li className=" text-slate-700 hover:underline"> Sign in</li>
             )}
           </Link>
         </ul>

@@ -183,8 +183,6 @@ export default function Profile() {
     }
   };
 
-  console.log(userListings);
-
   return (
     <div className="max-w-md mx-auto px-3">
       <h1 className="text-center text-3xl text-green-950 font-semibold my-7 mb-16">
