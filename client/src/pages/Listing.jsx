@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
@@ -15,6 +15,7 @@ import SwiperCore from "swiper";
 import "swiper/css/bundle";
 
 import { Loading } from "../components/Loading";
+import { Contact } from "../components/Contact";
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -60,7 +61,7 @@ export default function Listing() {
         </div>
       )}
       {error && (
-        <p className="flex items-center justify-center h-[80vh]  text-2xl">
+        <p className="flex items-center justify-center h-[80vh] text-2xl">
           Something went wrong!
         </p>
       )}
@@ -78,7 +79,7 @@ export default function Listing() {
             {listing.imageUrls.map((url, idx) => (
               <SwiperSlide key={idx}>
                 <div
-                  className="h-[93vh]"
+                  className="h-[600px]"
                   style={{
                     background: `url(${url}) center no-repeat`,
                     backgroundSize: "cover",
@@ -127,13 +128,16 @@ export default function Listing() {
             </p>
 
             <div className="flex flex-col gap-4 sm:flex-row">
-              <p className="bg-green-950 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+              <p className="bg-customDarkGreen w-full max-w-[200px] text-white text-center p-1 rounded-md">
                 {listing.type === "rent" ? "For Rent" : "For Sale"}
               </p>
 
               {listing.offer && (
-                <p className="bg-customDarkGreen w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${+listing.regularPrice - +listing.discountPrice}
+                <p className="bg-customNormGreen w-full max-w-[200px] text-white text-center p-1 rounded-md">
+                  ${" "}
+                  {(
+                    +listing.regularPrice - +listing.discountPrice
+                  ).toLocaleString("en-US")}
                 </p>
               )}
             </div>
@@ -168,6 +172,15 @@ export default function Listing() {
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
+            {currentUser && listing.userRef !== currentUser._id && !contact && (
+              <button
+                onClick={() => setContact(true)}
+                className="bg-green-950 text-white rounded-lg uppercase hover:opacity-90 p-3"
+              >
+                Contact Landlord
+              </button>
+            )}
+            {contact && <Contact listing={listing} />}
           </div>
         </>
       )}
