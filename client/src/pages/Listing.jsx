@@ -60,6 +60,7 @@ export default function Listing() {
           <Loading />
         </div>
       )}
+
       {error && (
         <p className="flex items-center justify-center h-[80vh] text-2xl">
           Something went wrong!

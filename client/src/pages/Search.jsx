@@ -8,6 +8,7 @@ export default function Search() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [showMore, setShowMore] = useState(false);
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
     type: "all",
@@ -49,12 +50,19 @@ export default function Search() {
     }
 
     const fetchData = async () => {
+      setShowMore(false);
       setLoading(true);
 
       const searchQuery = urlParams.toString();
 
       const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
+
+      if (data.length > 8) {
+        setShowMore(true);
+      } else {
+        setShowMore(false);
+      }
 
       setListings(data);
       setLoading(false);
@@ -80,11 +88,7 @@ export default function Search() {
       e.target.id === "furnished" ||
       e.target.id === "offer"
     ) {
-      setSidebarData({
-        ...sidebarData,
-        [e.target.id]:
-          e.target.checked || e.target.checked === "true" ? true : false,
-      });
+      setSidebarData({ ...sidebarData, [e.target.id]: e.target.checked });
     }
 
     if (e.target.id === "sort_order") {
@@ -103,11 +107,30 @@ export default function Search() {
     urlParams.set("type", sidebarData.type);
     urlParams.set("parking", sidebarData.parking);
     urlParams.set("furnished", sidebarData.furnished);
+    urlParams.set("offer", sidebarData.offer);
     urlParams.set("sort", sidebarData.sort);
     urlParams.set("order", sidebarData.order);
 
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
+  };
+
+  const onShowMoreClick = async () => {
+    const numberOfListing = listings.length;
+    const startIndex = numberOfListing;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+
+    const data = await res.json();
+
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+
+    setListings([...listings, ...data]);
   };
 
   return (
@@ -230,7 +253,9 @@ export default function Search() {
         </h1>
         <div className="p-7 flex flex-wrap gap-4">
           {!loading && listings.length === 0 && (
-            <p className="text-xl">No listing found!</p>
+            <p className="text-xl flex justify-center items-center w-full h-[70vh]">
+              No listing found!
+            </p>
           )}
 
           {loading && (
@@ -247,6 +272,14 @@ export default function Search() {
               </div>
             ))}
         </div>
+        {showMore && (
+          <button
+            onClick={onShowMoreClick}
+            className="text-customDarkGreen hover:underline w-full mx-auto p-7"
+          >
+            Show more
+          </button>
+        )}
       </div>
     </div>
   );
