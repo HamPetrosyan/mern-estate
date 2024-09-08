@@ -91,7 +91,7 @@ export default function Listing() {
             <div className="swiper-button-prev text-customNormGreen opacity-40 hover:opacity-100 transition-opacity duration-300" />
           </Swiper>
 
-          <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
+          <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
             <FaShare
               className="text-customDarkGreen"
               onClick={() => {
@@ -134,10 +134,7 @@ export default function Listing() {
 
               {listing.offer && (
                 <p className="bg-customNormGreen w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${" "}
-                  {(
-                    +listing.regularPrice - +listing.discountPrice
-                  ).toLocaleString("en-US")}
+                  ${+listing.regularPrice - +listing.discountPrice} OFF
                 </p>
               )}
             </div>
