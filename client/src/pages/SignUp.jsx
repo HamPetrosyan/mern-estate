@@ -13,8 +13,8 @@ import { OAuth } from "../components/OAuth";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const { error, loading } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -30,11 +30,6 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.username || !formData.email || !formData.password) {
-      dispatch(signUpFailure("Please fill in all fields"));
-      return;
-    }
-
     try {
       dispatch(signUpStart());
 
@@ -47,6 +42,7 @@ export default function SignUp() {
       });
 
       const data = await res.json();
+      console.log(data);
 
       if (data.success === false) {
         dispatch(signUpFailure(data.message));
@@ -54,9 +50,10 @@ export default function SignUp() {
       }
 
       dispatch(signUpSuccess(data));
+      dispatch(signUpFailure(null));
       navigate("/sign-in");
     } catch (error) {
-      dispatch(signUpFailure(error.message));
+      signUpFailure(error.message);
     }
   };
 

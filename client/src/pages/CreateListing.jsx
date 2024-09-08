@@ -171,32 +171,33 @@ export default function CreateListing() {
         <div className="flex flex-col flex-1 gap-6">
           <input
             type="text"
-            id="name"
             placeholder="Name"
+            id="name"
             maxLength="62"
-            minLength="5"
-            autoComplete="off"
+            minLength="10"
             required
-            value={formData.name}
             onChange={handleChange}
+            value={formData.name}
             className="border border-customDarkGreen focus:outline-none focus:ring-1 focus:ring-customDarkGreen placeholder:text-customDarkGreen placeholder:opacity-60 p-4 rounded-lg shadow-md"
           />
+
           <textarea
-            id="description"
+            type="text"
             placeholder="Description"
+            id="description"
             required
-            value={formData.description}
             onChange={handleChange}
+            value={formData.description}
             className="border border-customDarkGreen focus:outline-none focus:ring-1 focus:ring-customDarkGreen placeholder:text-customDarkGreen placeholder:opacity-60 p-4 rounded-lg shadow-md resize-none"
           />
+
           <input
             type="text"
-            id="address"
             placeholder="Address"
-            autoComplete="off"
+            id="address"
             required
-            value={formData.address}
             onChange={handleChange}
+            value={formData.address}
             className="border border-customDarkGreen focus:outline-none focus:ring-1 focus:ring-customDarkGreen placeholder:text-customDarkGreen placeholder:opacity-60 p-4 rounded-lg shadow-md"
           />
 
@@ -216,6 +217,7 @@ export default function CreateListing() {
                 Sell
               </label>
             </div>
+
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -249,6 +251,7 @@ export default function CreateListing() {
                 Parking spot
               </label>
             </div>
+
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -264,6 +267,7 @@ export default function CreateListing() {
                 Furnished
               </label>
             </div>
+
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -289,8 +293,8 @@ export default function CreateListing() {
                 min="1"
                 max="10"
                 required
-                value={formData.bedrooms}
                 onChange={handleChange}
+                value={formData.bedrooms}
                 className="border border-customDarkGreen p-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-customDarkGreen"
               />
               <p className="text-lg">Beds</p>
@@ -303,8 +307,8 @@ export default function CreateListing() {
                 min="1"
                 max="10"
                 required
-                value={formData.bathrooms}
                 onChange={handleChange}
+                value={formData.bathrooms}
                 className="border border-customDarkGreen p-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-customDarkGreen"
               />
               <p className="text-lg">Baths</p>
@@ -317,13 +321,15 @@ export default function CreateListing() {
                 min="50"
                 max="1000000000"
                 required
-                value={formData.regularPrice}
                 onChange={handleChange}
+                value={formData.regularPrice}
                 className="border border-customDarkGreen p-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-customDarkGreen"
               />
               <div className="flex flex-col items-center">
-                <p className="text-lg">Regular Price</p>
-                <span className="text-xs">($ / month)</span>
+                <p>Regular price</p>
+                {formData.type === "rent" && (
+                  <span className="text-xs">($ / month)</span>
+                )}
               </div>
             </div>
 
@@ -335,13 +341,15 @@ export default function CreateListing() {
                   min="0"
                   max="1000000000"
                   required
-                  value={formData.discountPrice}
                   onChange={handleChange}
+                  value={formData.discountPrice}
                   className="border border-customDarkGreen p-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-customDarkGreen"
                 />
                 <div className="flex flex-col items-center">
                   <p className="text-lg">Discounted Price</p>
-                  <span className="text-xs">($ / month)</span>
+                  {formData.type === "rent" && (
+                    <span className="text-xs">($ / month)</span>
+                  )}
                 </div>
               </div>
             )}

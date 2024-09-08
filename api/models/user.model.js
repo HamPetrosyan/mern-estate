@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        "https://www.pngkey.com/png/detail/115-1150152_default-profile-picture-avatar-png-green.png",
+        "https://play-lh.googleusercontent.com/x-tcjbgMbRBf1_5kvC1Vd_YgC0kIdtqWE0HmQiwN9BKEWVRDFTCHmuMfHbKMLsBnfF8H",
     },
   },
   { timestamps: true }

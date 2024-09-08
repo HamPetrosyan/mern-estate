@@ -25,7 +25,12 @@ export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
   const [filePerce, setFilePerce] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    username: currentUser.username,
+    email: currentUser.email,
+    password: "",
+    avatar: currentUser.avatar,
+  });
   const [message, setMessage] = useState({ text: "", type: "" });
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
@@ -76,11 +81,28 @@ export default function Profile() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  const isFormChanged = () => {
+    const isDataChanged =
+      formData.username !== currentUser.username ||
+      formData.email !== currentUser.email ||
+      (formData.password && formData.password.trim().length > 0) ||
+      formData.avatar !== currentUser.avatar;
+    return isDataChanged;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.username || !formData.email) {
+      setMessage({
+        text: "Username and email are required",
+        type: "error",
+      });
+      return;
+    }
+
     try {
       dispatch(updateUserStart());
-
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
@@ -88,7 +110,6 @@ export default function Profile() {
         },
         body: JSON.stringify(formData),
       });
-
       const data = await res.json();
 
       if (data.success === false) {
@@ -97,9 +118,10 @@ export default function Profile() {
       }
 
       dispatch(updateUserSuccess(data));
+      dispatch(updateUserFailure(null));
+      setMessage({ text: "", type: "" });
       setUpdateSuccess(true);
     } catch (error) {
-      console.error("Error:", error);
       dispatch(updateUserFailure(error.message));
     }
   };
@@ -151,7 +173,7 @@ export default function Profile() {
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
 
-      if (data.success === false) {
+      if (data.success === false || data.length === 0) {
         setShowListingsError(true);
         return;
       }
@@ -204,7 +226,7 @@ export default function Profile() {
         <img
           onClick={() => fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
-          alt="profile"
+          alt=""
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-5"
         />
 
@@ -251,12 +273,16 @@ export default function Profile() {
           onChange={handleChange}
           className="border border-customDarkGreen focus:outline-customDarkGreen placeholder:text-customDarkGreen placeholder:opacity-40 p-3 rounded-full"
         />
+
         <button
-          disabled={loading}
-          className="bg-customDarkGreen text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase"
+          disabled={!isFormChanged() || loading}
+          className={`bg-customDarkGreen text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase ${
+            !isFormChanged() ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
         >
           {loading ? "Loading..." : "Update"}
         </button>
+
         <Link
           to={"/create-listing"}
           className="bg-customNormGreen text-center text-white px-8 py-3 rounded-full transition-all duration-100 hover:opacity-90 disabled:opacity-80 uppercase"
@@ -264,6 +290,7 @@ export default function Profile() {
           Create Listing
         </Link>
       </form>
+
       <div className="flex justify-between pt-2">
         <span
           onClick={handleDeleteUser}
@@ -279,18 +306,26 @@ export default function Profile() {
         </span>
       </div>
 
-      <p className="mt-4 text-red-700">{error ? error : ""}</p>
+      <p className="my-4 text-red-700">{error ? error : ""}</p>
 
-      <p className="mt-4 text-customNormGreen">
+      <p className="my-4 text-customNormGreen">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
 
-      <button
-        onClick={handleShowListings}
-        className="text-customNormGreen w-full underline underline-offset-4"
-      >
-        Show Listings
-      </button>
+      <div className="">
+        <button
+          onClick={handleShowListings}
+          className="text-customNormGreen w-full underline underline-offset-4"
+        >
+          Show Listings
+        </button>
+
+        {showListingsError && (
+          <p className="text-green-950 mt-5 text-center">
+            There are no listings available.
+          </p>
+        )}
+      </div>
 
       <p className="text-red-700 mt-5">{showListingsError}</p>
 

@@ -1,9 +1,9 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 
 import { app } from "../firebase";
-import { signInSuccess } from "../redux/user/userSlice";
+import { signInFailure, signInSuccess } from "../redux/user/userSlice";
 
 export const OAuth = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ export const OAuth = () => {
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      console.log("Could not sign in with google", error);
+      dispatch(signInFailure("Could not sign in or sign up with Google"));
     }
   };
 

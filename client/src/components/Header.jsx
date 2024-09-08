@@ -8,6 +8,8 @@ export const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  console.log(currentUser);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -19,7 +21,7 @@ export const Header = () => {
   };
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm", searchTerm);
 
     if (searchTermFromUrl) {
@@ -53,28 +55,33 @@ export const Header = () => {
           </button>
         </form>
 
-        <ul className="flex sm:gap-4">
+        <ul className="flex sm:gap-4 items-center">
           <Link to="/">
             <li className="relative group list-none hidden sm:inline text-customDarkGreen">
               <span className="relative z-10">Home</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute top-5 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
+
           <Link to="/about">
             <li className="relative group list-none hidden sm:inline text-customDarkGreen">
               <span className="relative z-10">About</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute top-5 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
+
           <Link to="/profile">
             {currentUser ? (
               <img
                 className="rounded-full h-8 w-8 object-cover ml-2"
                 src={currentUser.avatar}
-                alt="profile"
+                alt=""
               />
             ) : (
-              <li className=" text-slate-700 hover:underline"> Sign in</li>
+              <li className="relative group list-none hidden sm:inline text-customDarkGreen">
+                <span className="relative z-10">Sign in</span>
+                <span className="absolute top-5 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+              </li>
             )}
           </Link>
         </ul>
