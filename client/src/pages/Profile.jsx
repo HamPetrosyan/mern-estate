@@ -362,7 +362,7 @@ export default function Profile() {
                       <Link to={`/listing/${listing._id}`}>
                         <li className="relative group list-none font-semibold ">
                           <span className="relative z-10">{truncatedName}</span>
-                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
                         </li>
                       </Link>
 
@@ -399,7 +399,7 @@ export default function Profile() {
                     <Link to={`/listing/${listing._id}`}>
                       <li className="relative group list-none font-semibold ">
                         <span className="relative z-10">{truncatedName}</span>
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
                       </li>
                     </Link>
 

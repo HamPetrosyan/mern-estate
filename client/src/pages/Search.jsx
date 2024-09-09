@@ -6,8 +6,8 @@ import { ListingItem } from "../components/ListingItem";
 
 export default function Search() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
@@ -49,13 +49,14 @@ export default function Search() {
       });
     }
 
-    const fetchData = async () => {
-      setShowMore(false);
+    const fetchListings = async () => {
       setLoading(true);
+      setShowMore(false);
 
       const searchQuery = urlParams.toString();
 
       const res = await fetch(`/api/listing/get?${searchQuery}`);
+
       const data = await res.json();
 
       if (data.length > 8) {
@@ -67,7 +68,8 @@ export default function Search() {
       setListings(data);
       setLoading(false);
     };
-    fetchData();
+
+    fetchListings();
   }, [location.search]);
 
   const handleChange = (e) => {
@@ -116,8 +118,9 @@ export default function Search() {
   };
 
   const onShowMoreClick = async () => {
-    const numberOfListing = listings.length;
-    const startIndex = numberOfListing;
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
@@ -251,7 +254,7 @@ export default function Search() {
         <h1 className="text-3xl font-semibold border-b border-customBorderGreen p-3 mt-5">
           Listing results:
         </h1>
-        <div className="p-7 flex flex-wrap gap-4">
+        <div className="p-7 flex flex-wrap gap-4 items-center justify-center">
           {!loading && listings.length === 0 && (
             <p className="text-xl flex justify-center items-center w-full h-[70vh]">
               No listing found!
@@ -275,7 +278,7 @@ export default function Search() {
         {showMore && (
           <button
             onClick={onShowMoreClick}
-            className="text-customDarkGreen hover:underline w-full mx-auto p-7"
+            className="text-customDarkGreen hover:underline w-full text-center my-4"
           >
             Show more
           </button>

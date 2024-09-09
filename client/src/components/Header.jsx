@@ -8,8 +8,6 @@ export const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  console.log(currentUser);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -59,14 +57,14 @@ export const Header = () => {
           <Link to="/">
             <li className="relative group list-none hidden sm:inline text-customDarkGreen">
               <span className="relative z-10">Home</span>
-              <span className="absolute top-5 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute top-5 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
 
           <Link to="/about">
             <li className="relative group list-none hidden sm:inline text-customDarkGreen">
               <span className="relative z-10">About</span>
-              <span className="absolute top-5 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute top-5 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
             </li>
           </Link>
 
@@ -80,7 +78,7 @@ export const Header = () => {
             ) : (
               <li className="relative group list-none hidden sm:inline text-customDarkGreen">
                 <span className="relative z-10">Sign in</span>
-                <span className="absolute top-5 left-0 w-0 h-0.5 bg-green-900 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute top-5 left-0 w-0 h-0.5 bg-customDarkGreen transition-all duration-300 group-hover:w-full"></span>
               </li>
             )}
           </Link>
