@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 
 export const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -39,21 +40,28 @@ export const Header = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="border outline-none border-customDarkGreen p-3 flex items-center focus-within:ring-1 ring-customDarkGreen rounded-full ml-2"
+          className="border outline-none border-customDarkGreen p-3 flex items-center focus-within:ring-1 ring-customDarkGreen rounded-full mx-1"
         >
           <input
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-transparent focus:outline-none sm:w-72 w-32 placeholder:text-customDarkGreen placeholder:opacity-40"
+            className="bg-transparent focus:outline-none sm:w-72 placeholder:text-customDarkGreen placeholder:opacity-40"
           />
           <button>
             <FaSearch className="text-customDarkGreen" />
           </button>
         </form>
 
-        <ul className="flex sm:gap-4 items-center">
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="sm:hidden block text-customDarkGreen"
+        >
+          {menuOpen ? <FaTimes size={25} /> : <FaBars size={25} />}
+        </button>
+
+        <ul className="hidden sm:flex sm:gap-4 items-center">
           <Link to="/">
             <li className="relative group list-none hidden sm:inline text-customDarkGreen">
               <span className="relative z-10">Home</span>
@@ -83,6 +91,46 @@ export const Header = () => {
             )}
           </Link>
         </ul>
+
+        {menuOpen && (
+          <ul className="sm:hidden absolute top-16 left-0 w-full bg-white shadow-lg shadow-customNormGreen pt-2">
+            <Link to="/">
+              <li
+                className="p-2 border-b border-customNormGreen text-customNormGreen hover:bg-customNormGreen hover:text-white  transition-all duration-300"
+                onClick={() => setMenuOpen(false)}
+              >
+                Home
+              </li>
+            </Link>
+
+            <Link to="/about">
+              <li
+                className="p-2 border-b border-customNormGreen text-customNormGreen hover:bg-customNormGreen hover:text-white transition-all duration-300"
+                onClick={() => setMenuOpen(false)}
+              >
+                About
+              </li>
+            </Link>
+
+            <Link to="/profile">
+              {currentUser ? (
+                <li
+                  className="p-2 text-customNormGreen hover:bg-customNormGreen hover:text-white transition-all duration-300"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Profile
+                </li>
+              ) : (
+                <li
+                  className="p-2 text-customNormGreen hover:bg-customNormGreen hover:text-white transition-all duration-300"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Sign in
+                </li>
+              )}
+            </Link>
+          </ul>
+        )}
       </div>
     </header>
   );

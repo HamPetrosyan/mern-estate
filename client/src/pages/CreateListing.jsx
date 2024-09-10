@@ -326,7 +326,7 @@ export default function CreateListing() {
                 className="border border-customDarkGreen p-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-customDarkGreen"
               />
               <div className="flex flex-col items-center">
-                <p>Regular price</p>
+                <p className="text-lg">Regular price</p>
                 {formData.type === "rent" && (
                   <span className="text-xs">($ / month)</span>
                 )}

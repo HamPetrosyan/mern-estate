@@ -135,7 +135,11 @@ export default function Listing() {
 
               {listing.offer && (
                 <p className="bg-customNormGreen w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${+listing.regularPrice - +listing.discountPrice} OFF
+                  $
+                  {(
+                    +listing.regularPrice - +listing.discountPrice
+                  ).toLocaleString("en-US")}{" "}
+                  OFF
                 </p>
               )}
             </div>
